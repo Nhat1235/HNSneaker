@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header" />
+<style>
+.text-line2{
+        background-color: transparent;
+        color: #606975;
+        width:90px;
+        outline: none;
+        outline-style: none;
+        outline-offset: 0;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid #606975 1px;
+        padding: 3px 10px;
+    }
+</style>
+<body>
+	<div th:replace="adminHome :: navbarAdmin"> </div>
+	<div class="" style="margin:20px; padding-top: 50px"></div>
+	
+	  <div class="container page-content">  
+   		<h4 class="font-weight-bold text-center mb-4">Tạo đơn hàng</h4> 
+   		
+   		 <div th:if="${alert}" class="row alert alert-danger alert-dismissible fade show" role="alert">
+	      <strong><i class="fas fa-exclamation-circle"></i>&nbsp<a th:text="${alert}"></a></strong>
+	      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	        <span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>    
+	    
+   		<div class="row card ">
+   			 <div class="card-body">
+       	 <div class="form-group">
+			<div class="">
+						     <form th:action="@{/admin/order-update-search/{id}(id=${idCart})}" class="mx-2 my-auto d-inline w-100" method="get">
+					            <div class="input-group">
+					                <input name="productName" type="search" class="form-control border border-right-0" placeholder="Tìm kiếm theo mã sản phẩm">
+					                <span class="input-group-append">
+					                    <button class="btn btn-outline-primary border border-left-0" type="submit">
+					                        <i class="fa fa-search"></i>
+					                    </button>
+					                </span>
+					            </div>
+					        </form>
+			</div>
+				
+		</div>
+			 <a th:href="@{/admin/order-detail?order={id}(id=${idCart})}" class="text-primary float-right rounded-pill mt-3">Danh sách hóa đơn <i class="fas fa-arrow-circle-right"></i></a> 
+       </div>
+   		</div>
+   		
+   		<div th:if="${productDetail}!=null">
+   			<form th:action="@{/admin/orderSave/}" method="post" class="row card mt-3 py-2" th:each="product : ${productDetail}">
+   			<div class="col-12 mb-2">
+   				<div class="row align-items-center">
+   				 <div class="col-3">
+             	 <div th:each="img : ${product.ProductImg}">
+               		 <a th:href="@{/article-detail?id=}+${product.IDProductDetail}"><img class="img-fluid" th:src="${img.picture1}"></a>
+                </div>
+              </div>
+               <div class="col-5">
+                <a th:href="@{/article-detail?id=}+${product.IDProductDetail}" class="h6 bold d-inline-block" th:text=${product.title}></a>
+                  <br>            
+                  <small><b>Giá: </b> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')+ ' ₫'}"></span></small>
+                   <br>   
+                  <small><b>Size: </b></small>
+	                  	<select name="size">
+							<option th:each="size : ${size}">
+								<a th:text="${size}"></a>
+							</option>
+						</select>
+						<input name="product" th:value="${product.IDProductDetail}" hidden="true"/>
+						<input name="order" th:value="${idCart}" hidden="true"/>
+              </div>
+     
+              	<div class="float-right row" style="margin-left: 200px">
+              	 <input name="qty" type="number" value="1" min="0" class="text-line2 "/>&nbsp&nbsp&nbsp<button class="btn btn-success float-right rounded-pill mt-3"><i class="fas fa-shopping-cart text-center"></i></button>
+              	</div>
+              </div>
+              
+              </div>
+          
+   			</form>
+   		</div>
+   		
+  	<div class="row card mt-3" >
+      <div class="card-body">
+        <div class="row align-items-center border-bottom py-2" th:each="cartItem : ${order.cartItem}">
+        
+          <div class="col-12 col-md-6 mb-2">
+            <div class="row align-items-center">
+       
+              <div class="col-4">
+             	 <div th:each="img : ${cartItem.productDetail.ProductImg}">
+               		 <a th:href="@{/article-detail?id=}+${cartItem.productDetail.IDProductDetail}"><img class="img-fluid" th:src="${img.picture1}"></a>
+                </div>
+              </div>
+              <div class="col-8">
+                <a th:href="@{/article-detail?id=}+${cartItem.productDetail.IDProductDetail}" class="h6 bold d-inline-block" th:text=${cartItem.productDetail.title}></a>
+                  <br>
+                  <div><small><b>Size</b>: <span th:text="${cartItem.size}"></span></small></div>                  
+                  <small><b>Giá</b>: <span th:text="${#numbers.formatDecimal(cartItem.productDetail.price, 0, 'COMMA', 0, 'POINT')+ ' ₫'}"></span></small>
+              </div>
+              
+            </div>
+          </div>  
+              
+          <div class="col-12 col-md-6 text-right">
+            <span>x<span th:text="${cartItem.qty}"></span> (đôi) -  </span>                           
+            <span class="font-weight-bold text-info"><span th:id="'price'+${cartItem.IDCartItem}" th:text="${#numbers.formatDecimal(cartItem.subtotal, 0, 'COMMA', 0, 'POINT')+ ' ₫'}"></span></span>
+         	  <a th:href="@{/admin/deleteProduct/{id}/{idCart}(id=${cartItem.IDCartItem}, idCart=${idCart})}" class="text-danger ml-2" ><i class="fas fa-times-circle"></i></a>
+          </div>  
+          
+		  </div> 
+		   
+       <div class="d-flex justify-content-center align-items-center mt-3 mb-2">
+         <div class="text-center p-3">           
+           <h5 class="counter">Tổng số</h5>
+           <h3 class="font-weight-bold"><span th:text="${#numbers.formatDecimal(order.orderTotal, 0, 'COMMA', 0, 'POINT')+ ' ₫'}"></span></h3>
+          </div>        
+       </div>
+       </div>
+    </div>    
+   		</div>
+	
+	
+	 <div th:replace="common/header :: footer"> </div>
+	 <div th:replace="common/header :: body-scripts"> </div>
+</body>
+<script type="text/javascript">
+</script>
+</html>

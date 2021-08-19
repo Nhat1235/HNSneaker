@@ -10,11 +10,15 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fpoly.model.Bill;
+import com.fpoly.model.Bill_Detail;
 import com.fpoly.model.Cart;
 import com.fpoly.model.Cart_Item;
 import com.fpoly.model.Product_Detail;
 import com.fpoly.model.ShoppingCart;
 import com.fpoly.model.User;
+import com.fpoly.repositories.BillRepository;
+import com.fpoly.repositories.Bill_DetailRepository;
 import com.fpoly.repositories.CartRepository;
 import com.fpoly.repositories.Cart_ItemRepository;
 import com.fpoly.repositories.Product_DetailRepository;
@@ -31,7 +35,13 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	Product_DetailRepository articleRepository;
-			
+	
+	@Autowired
+	BillRepository billReps;
+	
+	@Autowired
+	Bill_DetailRepository bill_DetailReps;
+	
 	@Override
 	@Transactional
 	@CacheEvict(value = "itemcount", allEntries = true)
@@ -54,7 +64,16 @@ public class OrderServiceImpl implements OrderService {
 			articleRepository.save(article);
 			item.setCart(order);
 			cartItemRepository.save(item);
-		}		
+		}
+		
+		Bill bill = new Bill();
+		bill.setUser(user);
+		bill.setOrderTotal(shoppingCart.getGrandTotal());
+		bill.setOrderDate(Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		bill.setShippingDate(Date.from(estimatedDeliveryDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		bill.setOrderStatus("Chờ xét duyệt");
+		
+		bill = billReps.save(bill);
 		return order;	
 	}
 	

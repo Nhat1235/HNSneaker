@@ -1,7 +1,33 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org./1999/xhtml">
 <head th:replace="common/header :: common-header" />
-
+<style>
+.text-line {
+        background-color: transparent;
+        color: #606975;
+        outline: none;
+        outline-style: none;
+        outline-offset: 0;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid #606975 1px;
+        padding: 3px 10px;
+    }
+.text-line2{
+        background-color: transparent;
+        color: #606975;
+        width:400px;
+        outline: none;
+        outline-style: none;
+        outline-offset: 0;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: solid #606975 1px;
+        padding: 3px 10px;
+    }
+</style>
 
 <body class="d-flex flex-column">
 
@@ -10,7 +36,22 @@
   <div style="margin-top:50px"></div>
  
   <div class="container page-content">  
-   <h4 class="font-weight-bold text-center mb-4">Hóa đơn chi tiết</h4>  
+   <h4 class="font-weight-bold text-center mb-4">Hóa đơn chi tiết</h4> 
+   
+   	    <div th:if="${alert}" class="row alert alert-danger alert-dismissible fade show" role="alert">
+	      <i class="fas fa-exclamation-triangle"></i>&nbsp<strong th:text=${message}></strong>
+	      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	        <span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>   
+	    
+	  <div th:if="${alert}" class=" row alert alert-danger alert-dismissible fade show" role="alert">
+	      <i class="fas fa-exclamation-triangle"></i>&nbsp<strong>Cập nhật trạng thái thất bại</strong>
+	      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	        <span aria-hidden="true">&times;</span>
+	      </button>
+	    </div>   
+	     
     <div class="row card p-2 pt-3 mb-2">
       <div class="align-items-center col-12 col-sm-6 col-lg-4 mb-2 mb-2">
         <h5 class="font-weight-bold"></h5>
@@ -34,55 +75,7 @@
       </div>
     </div>
     
-  
-	    
-    <div class="row card p-1 pt-3 mb-2 pb-3">
-     <div class="align-items-center col-12 col-sm-6  col-lg-12">
-     
-    <form th:action="@{/admin/order-detail-update/{id}(id=${order.IDCart})}" method="post">
-
-	<div class="form-group">
-		<a class="font-weight-bold m-1 ">Số tiền cọc nhận được : </a><input id="Buyer_status" name="Buyer_status" th:value="${order?.Buyer_status}" type="number" min="0" th:max="${(order.orderTotal*20)/100}" required="required"/> ₫
-	</div>
-	<div class="form-group">
-		<div class="">
- 			<a class="font-weight-bold mr-4">Thay đổi trạng thái đơn hàng : </a>
- 			
-			 <input class="form-check-input" type="radio" name="orderStatus" value="Chờ xét duyệt"  id="flexRadioDefault1">
-			  <label class="form-check-label badge badge-warning rounded mr-4" for="flexRadioDefault1">
-			    Chờ xét duyệt
-			  </label>
-			  
-			   <input class="form-check-input" type="radio" name="orderStatus" value="Đang đóng gói" id="flexRadioDefault2">
-			  <label class="form-check-label badge badge-info rounded mr-4"  for="flexRadioDefault2">
-			    Đang đóng gói
-			  </label>
-			  
-			   <input class="form-check-input" type="radio" name="orderStatus" value="Đang vận chuyển" id="flexRadioDefault3">
-			  <label class="form-check-label badge badge-secondary rounded mr-4"  for="flexRadioDefault3">
-			    Đang vận chuyển
-			  </label>
-				
-				<input class="form-check-input" type="radio" name="orderStatus" value="Hoàn thành" id="flexRadioDefault4">
-			  <label class="form-check-label badge badge-success rounded mr-4"  for="flexRadioDefault4">
-			    Hoàn thành
-			  </label>
-			 
-			 	<input class="form-check-input" type="radio" name="orderStatus" value="Hủy đơn" id="flexRadioDefault5">
-			  <label class="form-check-label badge badge-danger rounded mr-4"  for="flexRadioDefault5">
-			    Hủy đơn
-			  </label>
-			  
-		</div>
-	</div>
-	
-		<button class="btn btn-primary float-right rounded-pill mt-3">Cập nhật đơn hàng</button>
-	</form> 
-	
-     </div>
-    </div>
-    
-     <div class="row card p-2 pt-3 mb-2">
+  	<div class="row card p-2 pt-3 mb-2">
       <div class="align-items-center col-12 col-sm-6 col-lg-4 mb-2">
         <h5 class="font-weight-bold "></h5>
          <div class="list-group list-group-flush list-group-no-border list-group-sm">
@@ -95,8 +88,60 @@
         <hr class="d-block d-sm-none">        
       </div>
     </div>
-
-       
+	
+	<form th:action="@{/admin/order-detail-update/{id}(id=${order.IDCart})}" method="post">
+	 
+    <div class="row card p-1 pt-3 mb-2 pb-3">
+     <div class="align-items-center col-12 col-sm-6  col-lg-12">
+     
+   
+	
+	<div class="form-group">
+		<a class="font-weight-bold m-1 ">Số tiền cọc nhận được : </a>
+		<a th:if="${(order.orderTotal)<5000000}">
+		<input class="text-line" id="Buyer_status" name="Buyer_status" th:value="${order?.Buyer_status}" type="number" min="0" th:max="${(order.orderTotal*20)/100}" required="required"/> ₫
+		</a>
+		<a th:if="${(order.orderTotal)>5000000}">
+		<input class="text-line" id="Buyer_status" name="Buyer_status" th:value="${order?.Buyer_status}" type="number" min="500000" th:max="${(order.orderTotal*20)/100}" required="required"/> ₫
+		</a>
+		<i style="color:red"> *với đơn hàng trên 5,000,000 ₫ (năm triệu) tiền cọc không được dưới 500,000 ₫ </i>
+	</div>
+	<div class="form-group">
+		<div class="">
+ 			<a class="font-weight-bold mr-2">Thay đổi trạng thái đơn hàng :</a>
+ 			  <select name="orderStatus">
+ 			  	<option th:value="${order.orderStatus}" th:text="${order.orderStatus}" selected="selected" hidden="true"></option>
+			    <option th:each="status : ${status}" th:value="${status}" th:text="${status}"></option>
+			  </select>
+			  
+		</div>
+	</div>
+	<div class="form-group">
+		<a class="font-weight-bold m-1 ">Ghi chú : </a><input class="text-line2" id="Message" name="Message" th:value="${order?.Message}" />
+	</div>
+	
+     </div>
+    </div>
+    
+     <div class="row card mb-2">
+       <div class="card-body mt-4">
+			<div th:switch="${order.orderStatus}">
+				<span th:case="'Chờ xét duyệt'"><a th:href="@{/admin/order-update/{id}(id=${order.IDCart})}" class="btn btn-secondary float-left rounded-pill "><i class="fas fa-arrow-left"></i> Chỉnh sửa đơn hàng </a>
+			</span>
+  				<span th:case="'Đang đóng gói'"><a th:href="@{/admin/order-update/{id}(id=${order.IDCart})}" class="btn btn-secondary float-left rounded-pill "><i class="fas fa-arrow-left"></i> Chỉnh sửa đơn hàng </a>
+			</span>
+ 			    <span th:case="'Đang vận chuyển'"><a th:href="@{/admin/order-update/{id}(id=${order.IDCart})}" class="btn btn-secondary float-left rounded-pill disabled"><i class="fas fa-arrow-left"></i> Chỉnh sửa đơn hàng </a>
+			</span>
+				<span th:case="'Hoàn thành'"><a th:href="@{/admin/order-update/{id}(id=${order.IDCart})}" class="btn btn-secondary float-left rounded-pill disabled"><i class="fas fa-arrow-left"></i> Chỉnh sửa đơn hàng </a>
+			</span>
+				<span th:case="'Hủy đơn'"><a th:href="@{/admin/order-update/{id}(id=${order.IDCart})}" class="btn btn-secondary float-left rounded-pill disabled"><i class="fas fa-arrow-left"></i> Chỉnh sửa đơn hàng </a>
+			</span> 
+			</div>
+			<button class="btn btn-primary float-right rounded-pill ">Xác nhận <i class="fas fa-arrow-right"></i></button>
+       </div>
+     </div>
+     </form>
+     
      <div class="row card">
       <div class="card-body">
         <div class="row align-items-center border-bottom py-2" th:each="cartItem : ${order.cartItem}">

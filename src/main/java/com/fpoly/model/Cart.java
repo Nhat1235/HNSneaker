@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,10 @@ public class Cart {
 	@Column(name = "Buyer_status")
 	private String Buyer_status;
 	
-	@OneToMany(mappedBy = "cart")
+	@Column(name = "Message")
+	private String Message;
+	
+	@OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Cart_Item> cartItem;
 	
 	@ManyToOne
@@ -49,6 +53,17 @@ public class Cart {
 		
 	}
 	
+	
+	public String getMessage() {
+		return Message;
+	}
+
+
+	public void setMessage(String message) {
+		Message = message;
+	}
+
+
 	public Set<Cart_Item> getCartItem() {
 		return cartItem;
 	}

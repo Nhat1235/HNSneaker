@@ -2,18 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <head th:replace="common/header :: common-header" />
+<style>
 
+.modal-header {
+    background: #e85e6c;
+    border-bottom: none;
+    position: relative;
+    text-align: center;
+    margin: -20px -20px 0;
+    border-radius: 5px 5px 0 0;
+    padding: 35px;
+}
+
+.modal-body {
+	background: white;
+    border-bottom: none;
+    position: relative;
+    text-align: center;
+    margin: -20px -20px 0;
+    padding: 35px;
+}
+
+</style>
 <body>
 
 	<div th:replace="adminHome :: navbarAdmin"> </div>
 	<div class="" style="margin:20px; padding-top: 50px">
-		
-		 <div th:if="${alert}" class="alert alert-danger alert-dismissible fade show" role="alert">
-	      <i class="fas fa-exclamation-triangle"></i>&nbsp<strong>Cập nhật trạng thái thất bại</strong>
-	      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	        <span aria-hidden="true">&times;</span>
-	      </button>
-	    </div>   
 	    
 	    <div th:if="${alertSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
 	      <i class="fas fa-exclamation-triangle"></i>&nbsp<strong>Cập nhật đơn hàng thành công</strong>
@@ -21,44 +35,94 @@
 	        <span aria-hidden="true">&times;</span>
 	      </button>
 	    </div>   
-	    
-	    <div th:if="${alert}" class="alert alert-danger alert-dismissible fade show" role="alert">
-	      <i class="fas fa-exclamation-triangle"></i>&nbsp<strong th:text=${message}></strong>
-	      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	        <span aria-hidden="true">&times;</span>
-	      </button>
-	    </div>   
-	    
-	   
-	    
+	
 	<!-- <a style="margin-bottom: 10px" class="btn btn-success" th:href="@{/productDetail/getProductDetail}"><i class="fas fa-plus-circle"></i> Thêm sản phẩm mới</a>
 	 -->	
+	<div>
+		<div class="m-1">
+		 <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		 <input id="orderStatus" name="orderStatus" value="Chờ xét duyệt" hidden="true">
+		 	<button type="submit" class="btn btn-warning rounded-pill btn-sm" value="Chờ xét duyệt">Chờ xét duyệt</button>&nbsp
+		 </form>
+		  <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		  <input id="orderStatus" name="orderStatus" value="Đang đóng gói" hidden="true">
+		 	<button type="submit" class="btn btn-info rounded-pill btn-sm" value="Đang đóng gói">Đang đóng gói</button>&nbsp
+		 </form>
+		  <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		  <input id="orderStatus" name="orderStatus" value="Đang vận chuyển" hidden="true">
+		 	<button type="submit" class="btn btn-secondary rounded-pill btn-sm" value="Đang vận chuyển">Đang vận chuyển</button>&nbsp
+		  </form>
+		  <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		  <input id="orderStatus" name="orderStatus" value="Hoàn thành" hidden="true">
+		 	<button type="submit" class="btn btn-success rounded-pill btn-sm" value="Hoàn thành">Hoàn thành</button>&nbsp
+		 	 </form>
+		 <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		 <input id="orderStatus" name="orderStatus" value="Hủy đơn" hidden="true">
+		 	<button type="submit" class="btn btn-danger rounded-pill btn-sm" value="Hủy đơn">Hủy đơn</button>&nbsp
+		 </form>
+		 <form class="float-left" th:action="@{/admin/orderlistfilter}" method="get">
+		 	<input id="orderStatus" name="orderStatus" value="" hidden="true">
+		 	<button type="submit" class="btn btn-primary rounded-pill btn-sm">Tất cả</button>&nbsp
+		 </form>
+		</div>	
+
+	</div>
 	 <table id="table" class="table table-hover">
+	 
 			<thead class="bg-dark">
+					
 				   <tr style="color: white">
-                      <th class="no-sort" scope="col">Mã đơn hàng</th>
-                      <th class="no-sort text-center" scope="col">Người đặt</th>
-                      <th class="no-sort text-center" scope="col">Số điện thoại</th>
-                      <th class="no-sort text-center" scope="col">Trạng thái đơn hàng</th>
-                      <th class="no-sort text-center" scope="col">Số tiền đã cọc</th>
-                      <th class="no-sort text-center" scope="col">Ngày đặt</th>
+                      <th  scope="col">Mã đơn hàng</th>
+                      <th class=" text-center" scope="col">Người đặt</th>
+                      <th class=" text-center" scope="col">Số điện thoại</th>
+                      <th class=" text-center" scope="col">Trạng thái đơn hàng</th>
+                      <!-- <th class=" text-center" scope="col">Ghi chú</th> -->
+                      <th class=" text-center" scope="col">Số tiền đã cọc</th>
+                      <th class=" text-center" scope="col">Ngày đặt</th>
 <!--                       <th class="no-sort text-center" scope="col">Ngày nhận (dự tính)</th> -->
                       <th scope="col" class="text-right">Tổng tiền</th>
                       
                    </tr>
+
 			</thead>
 			<tbody class="bg-light">
 				<tr th:each="order : ${cartList}">
 					 <th scope="row" ><a th:href="@{/admin/order-detail?order=}+${order.IDCart}" class="text-primary">ORD<span th:text="${order.IDCart}"></span></a></th>                      
-                     <td class="text-center" th:text="${order.user.username}"></td>
-                     <td class="text-center" th:text="${order.user.address.ReciverPhoneNumber}"></td>
+                      <td class="text-center" th:text="${order.user.username}"></td>
+                      <td class="text-center" th:text="${order.user.address.ReciverPhoneNumber}"></td> 
                      <td class="text-center" th:switch="${order.orderStatus}">
-                      <span th:case="'Chờ xét duyệt'" class="badge badge-warning rounded" th:text="${order.orderStatus}"></span>
-                       <span th:case="'Đang đóng gói'" class="badge badge-info rounded" th:text="${order.orderStatus}"></span>
-                        <span th:case="'Đang vận chuyển'" class="badge badge-secondary rounded" th:text="${order.orderStatus}"></span>
+                     
+                     	 <span th:case="'Chờ xét duyệt'" class="badge badge-warning rounded" th:text="${order.orderStatus}"></span>
+                       	 <span th:case="'Đang đóng gói'" class="badge badge-info rounded" th:text="${order.orderStatus}"></span>
+                         <span th:case="'Đang vận chuyển'" class="badge badge-secondary rounded" th:text="${order.orderStatus}"></span>
                          <span th:case="'Hoàn thành'" class="badge badge-success rounded" th:text="${order.orderStatus}"></span>
-                          <span th:case="'Hủy đơn'" class="badge badge-danger rounded" th:text="${order.orderStatus}"></span>
-                      </td>
+                         <span th:case="'Hủy đơn'" class="badge badge-danger rounded" th:text="${order.orderStatus}"></span>
+                    <!--   </td>
+                       <td class="text-center"> -->
+                        
+                         <!-- <a id="modal" th:if="${order.Message}!=null" data-toggle="modal" data-target="#exampleModalCenter" href=#><i class="far fa-comment-dots"></i>
+                         <a id="textMessage" th:text="${order.Message}" hidden="true"></a></a>  -->    
+                      	
+ <!--                      		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+								  <div class="modal-dialog modal-dialog-centered" role="document">
+								    <div class="modal-content">
+								    
+								      <div class="modal-header">
+								        <h5 class="modal-title" id="exampleModalLongTitle" style="color:white">Ghi chú</h5>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true" style="color:white">&times;</span>
+								        </button>
+								      </div>
+								      
+								      <div class="modal-body">
+										<a id="reciveMess"></a>
+								      </div>
+
+								    </div>
+								  </div>
+								</div> -->
+                      
+                      </td> 
                       <td class="text-center">
                       
                       	<a th:text="${order.Buyer_status != null} ? ${#numbers.formatDecimal(order.Buyer_status, 0, 'COMMA', 0, 'POINT')}+' ₫' : 'Chưa cọc tiền'"></a>
@@ -74,13 +138,25 @@
 
 			</tfoot>
 		</table>
+		                         <!-- Button trigger modal -->
+								<!-- Modal -->
+
 	</div>
 	 <div th:replace="common/header :: footer"> </div>
 	 <div th:replace="common/header :: body-scripts"> </div>
 	  <script src="/js/tagsinput-custom.js"></script>
 	  <script type="text/javascript">
-	  $(document).ready(function() {
-		  $('#table').DataTable({
+	  
+	  $('#modal').click(function() {
+			 var mess = $('#textMessage').text();
+			 $('#reciveMess').text(mess);
+			  alert(mess);
+		});
+	  
+ 	  $(document).ready(function() {
+ 
+ 		 var oTable = $('#table').DataTable({
+			  
 			  columnDefs: [
 				{ "width": "10%", "targets": 0 },	
 				{ "width": "10%", "targets": 2 },	
@@ -88,12 +164,14 @@
 				],
 				"ordering": false,
 			  	"bPaginate": true,
-			    "bLengthChange": true,
+			    "bLengthChange": false,
 			    "bFilter": true,
 			    "bInfo": true,
-			    "bAutoWidth": false
+			    "bAutoWidth": false, 
 		  });
-	  });
+			  
+		});
+		
 	  </script>
 </body>
 </html>

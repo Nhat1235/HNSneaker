@@ -12,6 +12,7 @@ $(document).ready(function() {
 	    { "width": "10%", "targets": 1 },	
 	    { "width": "20%", "targets": 6 },	
 	    { "width": "10%", "targets": 8 },
+	    { "width": "10%", "targets": 9 },
 	    {
 	      targets: [0,2,6,10,11,12],
 	      createdCell: function(cell) {
@@ -68,7 +69,7 @@ $(document).ready(function() {
 					<th style="color: white">Thể loại</th>
 					<th style="color: white">Nhãn hiệu</th>
 					<th style="color: white">Màu sắc</th>
-					<th style="color: white">Xóa</th>
+<!-- 					<th style="color: white">Xóa</th> -->
 					<th style="color: white">Cập nhật</th>
 				</tr>
 			</thead>
@@ -83,11 +84,11 @@ $(document).ready(function() {
 					<td th:text="*{list.description}"></td>
 					<td th:text="*{list.stock}"></td>
 					<td><a th:text="${#numbers.formatDecimal(list.price, 0, 'COMMA', 0, 'POINT')}"></a>&nbsp₫</td>
-					<td th:text="*{list.listingDate}"></td>
+					<td th:text="${#dates.format(list.listingDate, 'dd-MMM-yyyy')}"></td>
 					<td><div th:each="item : ${list.category}"><span class="badge badge-dark mt-3" th:text="${item.categoryName}"></span></div></td> 
  					<td><div th:each="item : ${list.brand}"><span class="badge badge-dark mt-3" th:text="${item.name}"></span></div></td> 
 					<td><div th:each="item : ${list.color}"><span class="badge badge-dark mt-3" th:text="${item.colorName}"></span></div></td>
-					 <td><a class="btn btn-danger" th:href="@{/productDetail/delete/{id}(id=${list.IDProductDetail})}"><i class="fas fa-trash-alt"></i></a></td>
+					<!--  <td><a class="btn btn-danger" th:href="@{/productDetail/delete/{id}(id=${list.IDProductDetail})}"><i class="fas fa-trash-alt"></i></a></td> -->
 					 <td><a class="btn btn-primary" th:href="@{/productDetail/updateForm/{id}(id=${list.IDProductDetail})}"><i class="fas fa-edit"></i></a></td>
 				</tr> 
 			</tbody>

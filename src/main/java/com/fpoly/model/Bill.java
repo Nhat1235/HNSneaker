@@ -1,7 +1,10 @@
 package com.fpoly.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -27,13 +31,16 @@ public class Bill {
 	private String orderStatus;
 	
 	@Column(name = "orderTotal")
-	private Integer orderTotal;
+	private BigDecimal orderTotal;
 	
 	@Column(name = "shippingDate")
 	private Date shippingDate;
 	
 	@Column(name = "Buyer_status")
 	private String buyer_Status;
+	
+	@OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Cart_Item> cartItem;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -67,11 +74,11 @@ public class Bill {
 		this.orderStatus = orderStatus;
 	}
 
-	public Integer getOrderTotal() {
+	public BigDecimal getOrderTotal() {
 		return orderTotal;
 	}
 
-	public void setOrderTotal(Integer orderTotal) {
+	public void setOrderTotal(BigDecimal orderTotal) {
 		this.orderTotal = orderTotal;
 	}
 

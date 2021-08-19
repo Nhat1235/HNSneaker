@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fpoly.model.Bill;
 import com.fpoly.model.Cart;
 import com.fpoly.model.ShoppingCart;
 import com.fpoly.model.User;
@@ -16,4 +17,10 @@ public interface OrderService {
 	List<Cart> findByUser(User user);
 	
 	Cart findOrderWithDetails(Integer id);
+	
+//	Bill createOrderBill(ShoppingCart shoppingCart, User user);
+//	
+//	List<Bill> findByUserBill(User user);
+//	
+//	Bill findOrderWithDetailsBill(Integer id);
 }

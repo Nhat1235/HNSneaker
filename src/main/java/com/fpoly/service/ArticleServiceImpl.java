@@ -20,8 +20,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Override
 	public Page<Product_Detail> findArticlesByCriteria(Pageable pageable, Integer priceLow, Integer priceHigh, List<String> sizes, List<String> categories, List<String> brands, String search) {		
+
 		Page<Product_Detail> page = prodDetailRepos.findAll(ArticleSpecification.filterBy(priceLow, priceHigh, sizes, categories, brands, search), pageable);
-        return page;		
+		return page;		
 	}
 
 	@Override

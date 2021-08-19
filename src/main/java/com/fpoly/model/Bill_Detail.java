@@ -1,5 +1,6 @@
 package com.fpoly.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -51,6 +52,24 @@ public class Bill_Detail {
 	@ManyToOne
 	@JoinColumn(name = "Bill_id")
 	private Bill bill;
+	
+	public boolean canUpdateQty(Integer qty) {
+		return qty == null || qty <= 0 || this.getProductDetail().hasStock(qty);
+	}
+	
+	public BigDecimal getSubtotal() {
+		return new BigDecimal(productDetail.getPrice()).multiply(new BigDecimal(qty));
+	}
+
+	public void addQuantity(int qty) {
+		if (qty > 0) {
+			this.qty = this.qty + qty;
+		}
+	}
+	
+	public boolean hasSameSizeThan(String size2) {
+		return this.size.equals(size2);
+	}
 	
 	public Bill_Detail() {
 		

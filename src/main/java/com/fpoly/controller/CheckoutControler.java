@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.model.Address;
+import com.fpoly.model.Bill;
 import com.fpoly.model.Cart;
 import com.fpoly.model.ShoppingCart;
 import com.fpoly.model.User;
@@ -79,7 +80,8 @@ public class CheckoutControler {
 		
 		ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(user);	
 		if (!shoppingCart.isEmpty()) {
-			Cart order = orderService.createOrder(shoppingCart, user);		
+			Cart order = orderService.createOrder(shoppingCart, user);	
+//			Bill order2 = orderService.createOrder(shoppingCart, user);
 			redirectAttributes.addFlashAttribute("order", order);
 		}else {
 			redirectAttributes.addFlashAttribute("missingRequiredField", true);

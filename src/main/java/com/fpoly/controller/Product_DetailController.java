@@ -369,8 +369,8 @@ public class Product_DetailController {
 			@ModelAttribute("Product_Detail") Product_Detail product_Detail) {
 		
 		Product_Detail detail = product_DetailRepository.getById(id);
-
-		product_DetailRepository.delete(detail);
+		detail.setProductStatus(false);
+		product_DetailRepository.save(detail);
 
 	
 		return "redirect:/admin";
