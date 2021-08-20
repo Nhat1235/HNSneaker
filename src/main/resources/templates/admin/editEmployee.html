@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<head th:replace="common/header :: common-header" />
+
+<body>
+<div th:replace="adminHome :: navbarAdmin"></div>
+
+<div th:each="list:${userList}">
+
+	
+	
+<div class="border" style="padding: 6px; padding-bottom: 0px">
+		
+		<h1>Sửa thông tin tài khoản nhân viên</h1>
+
+
+
+			<form th:action="@{/admin/updateEmployee}" method="POST">
+			
+  			<div class="rounded container" style="padding: 2% ; width: 60%">
+  			
+  			 <div class="form-group">
+     			<h1>Sửa thông tin nhân viên</h1>
+    		</div>
+    		<div class="form-group">
+  				<input name="IDUser" class="form-control" th:value="*{list.IDUser}" hidden="true">
+
+  			</div>
+    		 <div class="form-group">
+  				<input name="username" th:classappend="${usernameExists} ? is-invalid" class="form-control" th:value="*{list.username}">
+				<div class="invalid-feedback">Username is already in use</div>
+  			</div>
+  			
+			<div class="form-group">
+  				<input type="password" name="password" class="form-control" th:value="*{list.password}">
+
+  			</div>
+  			
+			 <div class="form-group">
+  				<input name="email" th:classappend="${emailExists} ? is-invalid" class="form-control" th:value="*{list.email}">
+				<div class="invalid-feedback">Email is already in use</div>
+  			</div>
+  			
+    		<div class="form-inline form-group">
+    		
+    		<div class="form-group" style="margin-right: 20%">
+    			 Họ: &nbsp<input type="text" name="firstName" class="form-control" th:value="*{list.firstName}">
+    		</div>
+    		
+    		<div class="form-group">
+     			 Tên: &nbsp<input type="text" name="lastName" class="form-control" th:value="*{list.lastName}">
+    		</div>
+    		
+  			</div>
+  			
+   			<div class="form-group">
+     			 <input name="phoneNumber" class="form-control" placeholder="SĐT" th:value="*{list.phoneNumber}"/>
+    		</div>
+
+    		 <div class="form-group">
+     			 <input name="secondPhoneNumber" class="form-control" placeholder="SĐT 2" th:value="*{list.secondPhoneNumber}"/>
+    		</div>
+    		
+        
+        	<button style="margin-left:40%" class="btn btn-success"><i class="fas fa-save"></i> Cập nhật </button>
+        	
+        </div>
+        
+  			
+		</form>
+	</div>
+</div>
+	
+	  <div th:replace="common/header :: footer"> </div>
+	 <div th:replace="common/header :: body-scripts"> </div>
+	  <script src="/js/tagsinput-custom.js"></script>
+</body>
+</html>

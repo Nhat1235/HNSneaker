@@ -7,7 +7,7 @@
 
 	<div th:replace="adminHome :: navbarAdmin"> </div>
 	<div class="" style="margin:20px; padding-top: 50px">
-	<a style="margin-bottom: 10px" class="btn btn-success" th:href="@{/productDetail/getProductDetail}"><i class="fas fa-plus-circle"></i> Thêm tài khoản</a>
+	<a style="margin-bottom: 10px" class="btn btn-success" th:href="@{/admin/saveEmployee}"><i class="fas fa-plus-circle"></i> Thêm tài khoản</a>
 		<table id="table" class="table table-hover">
 			<thead class="bg-dark">
 				<tr>
@@ -27,8 +27,8 @@
 					<td th:text="*{list.email}"></td>
 					<td th:text="*{list.phoneNumber}"></td>
 					
-					 <td><a class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td> 
-					 <td><a class="btn btn-primary"><i class="fas fa-edit"></i></a></td>
+					 <td><a class="btn btn-danger" th:href="@{/admin/deleteEmployee/{id}(id = ${list.IDUser})}"><i class="fas fa-trash-alt"></i></a></td> 
+					 <td><a class="btn btn-primary"  th:href="@{/admin/editEmployee/{id}(id = ${list.IDUser})}"><i class="fas fa-edit"></i></a></td>
 				</tr> 
 			</tbody>
 			<tfoot>

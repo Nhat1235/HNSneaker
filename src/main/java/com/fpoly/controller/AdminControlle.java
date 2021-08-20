@@ -13,10 +13,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +32,11 @@ import com.fpoly.model.Cart_Item;
 import com.fpoly.model.Product;
 import com.fpoly.model.Product_Detail;
 import com.fpoly.model.Product_Img;
+import com.fpoly.model.Role;
 import com.fpoly.model.ShoppingCart;
 import com.fpoly.model.Size;
 import com.fpoly.model.User;
+import com.fpoly.model.User_Role;
 import com.fpoly.repositories.BrandRepository;
 import com.fpoly.repositories.CartRepository;
 import com.fpoly.repositories.Cart_ItemRepository;
@@ -39,11 +45,14 @@ import com.fpoly.repositories.ColorRepository;
 import com.fpoly.repositories.ProductRepository;
 import com.fpoly.repositories.Product_DetailRepository;
 import com.fpoly.repositories.Product_ImgRepository;
+import com.fpoly.repositories.RoleRepository;
 import com.fpoly.repositories.SizeRepository;
 import com.fpoly.repositories.UserRepository;
+import com.fpoly.repositories.User_RoleRepository;
 import com.fpoly.service.OrderService;
 import com.fpoly.service.Product_DetailService;
 import com.fpoly.service.ShoppingCartService;
+import com.fpoly.service.UserService;
 
 @Controller
 @RequestMapping("admin")
@@ -57,6 +66,9 @@ public class AdminControlle {
 	
 	@Autowired
 	Cart_ItemRepository cartItemRepos;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	UserRepository user;
@@ -96,7 +108,13 @@ public class AdminControlle {
 	
 	@Autowired
 	private OrderService orderService;
-
+	
+	@Autowired
+	private User_RoleRepository userRoleRepo;
+	
+	@Autowired
+	private RoleRepository roleRepo;
+	
 	@RequestMapping(value = "")
 	public String getAll1(Model model) {
 		List<Product_Detail> list = product_DetailRepository.findAll();
@@ -324,5 +342,60 @@ public class AdminControlle {
 		model.addAttribute("list", list);
 		return "admin/employee";
 		
+	}
+	
+	@RequestMapping(value ="/saveEmployee")
+	public String editEmployee(Model model) {
+		
+		return "admin/saveEmployee";
+	}
+	
+	@PostMapping("/saveEmployee")
+	public String sE(Model model, @ModelAttribute("user") User user, BindingResult bindingResults,
+			RedirectAttributes redirectAttributes) {
+		
+		boolean invalidFields = false;
+
+		if (bindingResults.hasErrors()) {
+			return "redirect:/admin/saveEmployee";
+		}
+		if (userService.findByUsername(user.getUsername()) != null) {
+			redirectAttributes.addFlashAttribute("usernameExists", true);
+			invalidFields = true;
+		}
+		if (invalidFields) {
+			return "redirect:/admin/saveEmployee";
+		}
+		User userTemp = ureps.save(user);
+		
+		if (userTemp != null) {
+			Role role = roleRepo.findByRoleName("ROLE_ADMIN");
+			User_Role u = new User_Role();
+			u.setRole(role);
+			u.setUser(userTemp);
+			userRoleRepo.save(u);
+		}
+		return "redirect:/admin/employee";
+	}
+	
+	
+	@RequestMapping(value ="/editEmployee/{id}")
+	public String editEmployee(Model model,@PathVariable Integer id) {
+		User userList = ureps.getById(id);
+		model.addAttribute("userList", userList);
+		return "admin/editEmployee";
+	}
+	
+	@PostMapping("/updateEmployee")
+	public String updateE(Model model, @ModelAttribute("user") User user) {
+		ureps.save(user);
+		return "redirect:/admin/employee";
+	}
+	
+	@DeleteMapping("/deleteEmployee/{id}")
+	public String delE(Model model,@PathVariable Integer id) {
+		User u = ureps.getById(id);
+		ureps.delete(u);
+		return "redirect:/admin/employee";
 	}
 }

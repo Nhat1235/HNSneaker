@@ -120,62 +120,6 @@
 		</form>
 	</div>
 </div>
-	<!-- <div th:each="list:${ProductDetail}">
-		<div class="border" style="padding: 6px">
-		<h1>Product Detail form</h1>
-		
-		
-		<form th:action="@{/productDetail/update}" method="POST">
-			
-			<input type="text" name="IDProductDetail" class="form-control" th:value="*{list.IDProductDetail}" hidden="true">
-			
-  			<div class="form-row" style="padding: 20px">
-   			 <div class="col-sm-5">
-     			 <input type="text" name="title" class="form-control" th:value="*{list.title}" placeholder="Tên sản phẩm">
-     			  
-    		</div>
-    		<div class="col-sm-5">
-    			  <input type="text" name="shortTitle" class="form-control" th:value="*{list.shortTitle}" placeholder="Tên viết tắt">
-    		</div>
-  			</div>
-  			
-  			<select name="productStatus">
-						<option th:value="${id.IDProduct}" th:text="${id.title}" />
-			</select>
-				
-  			<div class="form-row" style="padding: 20px">
-   			 <div class="col-sm-5">
-     			 <input type="text" name="sku" class="form-control" placeholder="SKU" th:value="*{list.sku}" >
-    		</div>
-    		<div class="col-sm-5">
-    			  <input type="text" name="description" class="form-control" placeholder="Mô tả sản phẩm" th:value="*{list.description}">
-    		</div>
-  			</div>
-  			
-  			<div class="form-row" style="padding: 20px">
-   			 <div class="col-sm-5">
-     			 <input type="number" name="stock" class="form-control" placeholder="Số lượng" th:value="*{list.stock}">
-    		</div>
-    		<div class="col-sm-5">
-    			  <input type="number" name="price" class="form-control" placeholder="Giá bán" th:value="*{list.price}">
-    		</div>
-  			</div>
-  			
-  			<div class="form-row" style="padding: 20px">
-   			 <div class="col-sm-5">
-     			 <input type="text" name="Materials" class="form-control" placeholder="Chất liệu" th:value="*{list.Materials}">
-    		</div>
-    		<div class="col-sm-5">
-    			 <select class="custom-select" name="product">
-    			 		
-						<option th:each="id : ${productList}" th:value="${id.IDProduct}" th:text="${id.title}" th:selected="(${id.IDProduct} == *{list.product.IDProduct})" />
-				</select>
-    		</div>
-  			</div>
-  			<button style="margin-left:40%" class="btn btn-success">Submit</button>
-		</form>
-	</div>
-	</div> -->
 	
 	  <div th:replace="common/header :: footer"> </div>
 	 <div th:replace="common/header :: body-scripts"> </div>
