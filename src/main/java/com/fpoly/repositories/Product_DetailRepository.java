@@ -25,7 +25,10 @@ public interface Product_DetailRepository extends JpaRepository<Product_Detail, 
 	
 	@Query(value = "select * from Product_Detail where sku=:name",nativeQuery = true)
 	Product_Detail findByTitle(@Param("name") String name);
-
+	
+	@Query(value = "select * from Product_Detail where stock<30",nativeQuery = true)
+	List<Product_Detail> findAllByStock();
+	
 	Page<Product_Detail> findByProductStatusTrue(Specification<Product_Detail> filterBy, Pageable pageable);
 	
 }

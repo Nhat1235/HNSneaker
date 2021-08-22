@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header" />
+<script type="text/javascript">
+
+$(document).ready(function() {
+	
+	  var table = $('#table').DataTable({
+		 	"bPaginate": true,
+		    "bLengthChange": false,
+		    "bFilter": true,
+		    "bInfo": true,
+		    "bAutoWidth": false,
+	    columnDefs: [
+	    	
+/* 	    { "width": "10%", "targets": 1 },	
+	    { "width": "20%", "targets": 6 },	
+	    { "width": "10%", "targets": 8 },
+	    { "width": "10%", "targets": 9 }, */
+	    {
+	      targets: [2,7,8,9],
+	      createdCell: function(cell) {
+	        var $cell = $(cell);
+
+
+	        $(cell).contents().wrapAll("<div class='content'></div>");
+	        var $content = $cell.find(".content");
+
+	        $(cell).append($("<a style='color:black' href='#table' class='badge badge-light'>...</a>"));
+	        $btn = $(cell).find("a");
+
+	        $content.css({
+	          "height": "50px",
+	          "overflow": "hidden"
+	        })
+	        $cell.data("isLess", true);
+
+	        $btn.click(function() {
+	          var isLess = $cell.data("isLess");
+	          $content.css("height", isLess ? "auto" : "50px")
+	          $(this).text(isLess ? "Rút gọn" : "...")
+	          $cell.data("isLess", !isLess)
+	        })
+	      }
+	    
+	    
+	    }]
+	  });
+	  
+	  
+	});
+
+</script>
+<body>
+	<div th:replace="adminHome :: navbarAdmin"> </div>
+	<div class="" style="margin:20px; padding-top: 50px"></div>
+	
+	  <div class="">  
+	  <div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="card p-5 text-center bg-success text-white">
+	      <div class="row mb-3 text-center">
+				<i class="fas fa-coins"></i> &nbsp Doanh thu theo ngày
+		  </div>
+	      	<div class="row">
+				 <div class="col-sm" th:if="${today}==null"><a>0 ₫</a></div>
+				 <div class="col-sm" th:if="${today}!=null"><a th:text="${#numbers.formatDecimal((today), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+			</div>
+      </div>
+    </div>
+    <div class="col-sm">
+       <div class="card p-5 text-center bg-primary text-white">
+	      <div class="row mb-3 text-center">
+				<i class="fas fa-coins"></i> &nbsp Doanh thu theo tuần
+		  </div>
+	      	<div class="row">
+				 <div class="col-sm" th:if="${week}==null"><a>0 ₫</a></div>
+				 <div class="col-sm" th:if="${week}!=null"><a th:text="${#numbers.formatDecimal((week), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+			</div>
+      </div>
+    </div>
+    <div class="col-sm">
+       <div class="card p-5 text-center bg-info text-white">
+	      <div class="row mb-3 text-center">
+				<i class="fas fa-coins"></i> &nbsp Doanh thu tháng&nbsp<a th:text="${#dates.format(#dates.createNow(), ' MM')}"></a>
+		  </div>
+	      	<div class="row">
+ 				 <div class="col-sm" th:if="${month}==null"><a>0 ₫</a></div>
+				 <div class="col-sm" th:if="${month}!=null"><a th:text="${#numbers.formatDecimal((month), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+			</div>
+      </div>
+    </div>
+       <div class="col-sm">
+       <div class="card p-5 text-center bg-danger text-white">
+	      <div class="row mb-3 text-center">
+				<i class="fas fa-coins"></i> &nbsp Doanh thu năm&nbsp<a th:text="${#dates.format(#dates.createNow(), ' yyyy')}"></a> 
+		  </div>
+	      	<div class="row">
+				 <div class="col-sm" th:if="${year}==null"><a>0 ₫</a></div>
+				 <div class="col-sm" th:if="${year}!=null"><a th:text="${#numbers.formatDecimal((year), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+			</div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <hr class="mt-5">
+  <div class="p-2 mt-2">
+  <h3 class="mt-2 text-dark" style="text-align:center">Danh sách sản phẩm sắp hết hàng</h3>
+  <div class="mt-3">
+  		<table id="table" class="table table-hover">
+			<thead class="bg-dark">
+				<tr>
+					<!-- <th style="color: white">#</th> -->
+					<th style="color: white">Tên</th>
+					<th style="color: white">Ảnh</th>
+					<th style="color: white">Size</th>
+<!-- 					<th style="color: white">Trạng thái</th> -->
+					<th style="color: white">Tên ngắn</th>
+					<th style="color: white">Mã</th>
+<!-- 					<th style="color: white">Mô tả</th> -->
+					<th style="color: white">Số lượng</th>
+					<th style="color: white">Giá</th>
+<!-- 					<th style="color: white">Ngày listing</th> -->
+					<th style="color: white">Thể loại</th>
+					<th style="color: white">Nhãn hiệu</th>
+					<th style="color: white">Màu sắc</th>
+<!-- 					<th style="color: white">Xóa</th> -->
+<!-- 					<th style="color: white">Cập nhật</th> -->
+				</tr>
+			</thead>
+			<tbody class="bg-light">
+				<tr th:each="list : ${list}">
+					<td th:text="*{list.title}"></td>
+					<td><span th:each="item : ${list.ProductImg}"><img th:src="${item.picture1}" style="width:50px; margin:5px; max-height: 70px"/></span></td>
+					<td><div th:each="item : ${list.size}"><span class="badge badge-dark mt-3" th:text="${item.value}"></span></div></td>
+				 	<!-- <td th:text="*{list.productStatus}?'Mở bán':'Tạm khóa'" class="badge badge-dark mt-3"></td>  -->
+					<td th:text="*{list.shortTitle}"></td>
+					<td th:text="*{list.sku}"></td>
+<!-- 					<td th:text="*{list.description}"></td> -->
+
+					<td th:if="*{list.stock}<30">
+						<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> <a th:text="*{list.stock}"></a></span>
+					</td>
+					
+					<td><a th:text="${#numbers.formatDecimal(list.price, 0, 'COMMA', 0, 'POINT')}"></a>&nbsp₫</td>
+<!-- 					<td th:text="${#dates.format(list.listingDate, 'dd-MMM-yyyy')}"></td> -->
+					<td><div th:each="item : ${list.category}"><span class="badge badge-dark mt-3" th:text="${item.categoryName}"></span></div></td> 
+ 					<td><div th:each="item : ${list.brand}"><span class="badge badge-dark mt-3" th:text="${item.name}"></span></div></td> 
+					<td><div th:each="item : ${list.color}"><span class="badge badge-dark mt-3" th:text="${item.colorName}"></span></div></td>
+					<!--  <td><a class="btn btn-danger" th:href="@{/productDetail/delete/{id}(id=${list.IDProductDetail})}"><i class="fas fa-trash-alt"></i></a></td> -->
+					<!--  <td><a class="btn btn-primary" th:href="@{/productDetail/updateForm/{id}(id=${list.IDProductDetail})}"><i class="fas fa-edit"></i></a></td>
+				 --></tr> 
+			</tbody>
+			<tfoot>
+
+			</tfoot>
+		</table>
+		</div>
+</div>
+   	</div>
+	
+	
+	 <div th:replace="common/header :: footer"> </div>
+	 <div th:replace="common/header :: body-scripts"> </div>
+</body>
+<script type="text/javascript">
+</script>
+</html>

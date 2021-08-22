@@ -1,5 +1,6 @@
 package com.fpoly.repositories;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,4 +27,16 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 	
 	@Query(value = "select distinct orderStatus from Cart order by orderStatus asc",nativeQuery = true)
 	List<String> findStatus();
+	
+	@Query(value="select sum(orderTotal) from cart where orderDate = curdate()", nativeQuery = true)
+	BigDecimal today();
+	
+	@Query(value="select sum(orderTotal) from cart where orderDate > now() - interval 1 week", nativeQuery = true)
+	BigDecimal week();
+	
+	@Query(value="select sum(orderTotal) from cart where MONTH(orderDate)=MONTH(now())", nativeQuery = true)
+	BigDecimal month();
+	
+	@Query(value="SELECT sum(orderTotal) FROM cart WHERE YEAR(orderDate) ='2021'", nativeQuery = true)
+	BigDecimal year();
 }
