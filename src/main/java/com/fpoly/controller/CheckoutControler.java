@@ -19,6 +19,8 @@ import com.fpoly.model.Bill;
 import com.fpoly.model.Cart;
 import com.fpoly.model.ShoppingCart;
 import com.fpoly.model.User;
+import com.fpoly.repositories.AddressRepository;
+import com.fpoly.repositories.UserRepository;
 import com.fpoly.service.OrderService;
 import com.fpoly.service.ShoppingCartService;
 import com.fpoly.service.UserService;
@@ -35,6 +37,12 @@ public class CheckoutControler {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AddressRepository Adrep;
+	
+	@Autowired
+	private UserRepository UserRepo;
 	
 	@RequestMapping("/checkout")
 	public String checkout( @RequestParam(value="missingRequiredField", required=false) boolean missingRequiredField, Model model, Authentication authentication, Principal principal, RedirectAttributes attr) {		
@@ -77,6 +85,22 @@ public class CheckoutControler {
 	@RequestMapping(value = "/checkout", method = RequestMethod.POST)
 	public String placeOrder(@ModelAttribute("address") Address address, RedirectAttributes redirectAttributes, Authentication authentication,Model model) {		
 		User user = (User) authentication.getPrincipal();		
+		System.out.println(address.getCity() + address.getReciverPhoneNumber());
+		
+		if(user.getAddress()==null) {
+			Address ad = new Address();
+			ad.setCity(address.getCity());
+			ad.setReciverPhoneNumber(address.getReciverPhoneNumber());
+			ad.setReciverName(address.getReciverName());
+			ad.setStreetAddress(address.getStreetAddress());
+			
+			if(ad!=null) {
+				 Adrep.save(ad);
+				 user.setAddress(ad);
+				 UserRepo.save(user);
+			}
+			
+		}
 		
 		ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(user);	
 		if (!shoppingCart.isEmpty()) {

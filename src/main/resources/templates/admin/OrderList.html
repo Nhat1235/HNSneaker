@@ -125,8 +125,8 @@
                       </td> 
                       <td class="text-center">
                       
-                      	<a th:text="${order.Buyer_status != null} ? ${#numbers.formatDecimal(order.Buyer_status, 0, 'COMMA', 0, 'POINT')}+' ₫' : 'Chưa cọc tiền'"></a>
-                      	
+                      	<a class="text-success" th:text="${order.Buyer_status != null} ? ${#numbers.formatDecimal(order.Buyer_status, 0, 'COMMA', 0, 'POINT')}+' ₫'"></a>
+                      	<a class="text-danger" th:text="${order.Buyer_status == null} ? 'Chưa cọc tiền'"></a>
                       </td>
                       <td class="text-center" th:text="${#dates.format(order.orderDate, 'dd-MMM-yyyy')}"></td>
 <!--                       <td class="text-center" th:text="${#dates.format(order.shippingDate, 'dd-MMM-yyyy')}"></td> -->

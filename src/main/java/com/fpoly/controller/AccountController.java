@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -65,9 +66,15 @@ public class AccountController {
 	}
 
 	@RequestMapping("/my-profile")
-	public String myProfile(Model model, Authentication authentication) {
+	public String myProfile(Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
 		User user = (User) authentication.getPrincipal();
+		if (user.isStatus()) {
+			model.addAttribute("tempAcc", true);
+		}else {
+			model.addAttribute("tempAcc", false);
+		}
 		model.addAttribute("user", user);
+		
 		return "user/myProfile";
 	}
 
@@ -89,11 +96,36 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/update-user-address", method = RequestMethod.POST)
-	public String updateUserAddress(@ModelAttribute("address") Address address, Model model, Principal principal)
+	public String updateUserAddress(@ModelAttribute("address") Address address, Model model, BindingResult bindingResults, Principal principal, RedirectAttributes redirectAttributes)
 			throws Exception {
 		User currentUser = userService.findByUsername(principal.getName());
 		if (currentUser == null) {
 			throw new Exception("User not found");
+		}
+		
+		boolean invalidFields = false;
+
+		if (bindingResults.hasErrors()) {
+			return "redirect:/my-address";
+		}
+		if (address.getReciverName().equals("")) {
+			redirectAttributes.addFlashAttribute("ReciverNameErr", true);
+			invalidFields = true;
+		}
+		if (address.getStreetAddress().equals("")) {
+			redirectAttributes.addFlashAttribute("streetAddressErr", true);
+			invalidFields = true;
+		}
+		if (address.getCity().equals("")) {
+			redirectAttributes.addFlashAttribute("cityErr", true);
+			invalidFields = true;
+		}
+		if (address.getReciverPhoneNumber().equals("") || address.getReciverPhoneNumber().matches("(09|01[2|6|8|9])+([0-9]{8,9})\\b")==false) {
+			redirectAttributes.addFlashAttribute("ReciverPhoneNumberErr", true);
+			invalidFields = true;
+		}
+		if (invalidFields) {
+			return "redirect:/my-address";
 		}
 		
 		System.out.println(address);
@@ -149,8 +181,9 @@ public class AccountController {
 			userRoleRepo.save(u);
 		}
 		userSecurityService.authenticateUser(user.getUsername());
-
-		return "myAccount";
+		
+		return "redirect:/store";
+//		return "myAccount";
 //		return "redirect:/my-profile";  
 	}
 
@@ -163,16 +196,22 @@ public class AccountController {
 		}
 		/* check username already exists */
 		User existingUser = userService.findByUsername(user.getUsername());
-		if (existingUser != null && !existingUser.getIDUser().equals(currentUser.getIDUser())) {
+		if (existingUser != null && !existingUser.getIDUser().equals(currentUser.getIDUser()) || user.getUsername().equals("")) {
 			model.addAttribute("usernameExists", true);
 			return "user/myProfile";
 		}
 		/* check email already exists */
 		existingUser = userService.findByEmail(user.getEmail());
-		if (existingUser != null && !existingUser.getIDUser().equals(currentUser.getIDUser())) {
+		if (existingUser != null && !existingUser.getIDUser().equals(currentUser.getIDUser()) || user.getEmail().equals("")) {
 			model.addAttribute("emailExists", true);
 			return "user/myProfile";
 		}
+		
+		if (newPass.equals("")) {
+			model.addAttribute("passErr", true);
+			return "user/myProfile";
+		}
+		
 		/* update password */
 		/*
 		 * if (newPassword != null && !newPassword.isEmpty() &&
@@ -188,6 +227,7 @@ public class AccountController {
 		currentUser.setLastName(user.getLastName());
 		currentUser.setUsername(user.getUsername());
 		currentUser.setEmail(user.getEmail());
+		currentUser.setStatus(false);
 //		currentUser.setPassword(user.getPassword());
 		currentUser.setPassword(newPass);
 		userService.save(currentUser);

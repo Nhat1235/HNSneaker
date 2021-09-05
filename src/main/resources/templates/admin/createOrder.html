@@ -21,7 +21,7 @@
 	<div class="" style="margin:20px; padding-top: 50px"></div>
 	
 	  <div class="container page-content">  
-   		<h4 class="font-weight-bold text-center mb-4">Tạo đơn hàng</h4> 
+   		<h4 class="font-weight-bold text-center mb-4">Chỉnh sửa đơn hàng</h4> 
    		
    		 <div th:if="${alert}" class="row alert alert-danger alert-dismissible fade show" role="alert">
 	      <strong><i class="fas fa-exclamation-circle"></i>&nbsp<a th:text="${alert}"></a></strong>
@@ -32,6 +32,57 @@
 	    
    		<div class="row card ">
    			 <div class="card-body">
+   			 
+   		<div class="form-group">
+
+   		<a href="#" class="float-left text-primary" data-toggle="modal" data-target="#exampleModalLong">
+  			<i class="fas fa-question-circle"></i> Danh sách mã sản phẩm
+		</a>
+
+<!-- Modal -->
+
+			<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-lg" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLongTitle">Danh sách mã sản phẩm</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <div th:each="product : ${product}">
+			        
+			        	 <div class="col-12 mb-2">
+											<div class="row align-items-center">
+												<div class="col-3">
+													<div th:each="img : ${product.ProductImg}">
+														<a
+															th:href="@{/article-detail?id=}+${product.IDProductDetail}"><img
+															class="img-fluid" th:src="${img.picture1}"></a>
+													</div>
+												</div>
+												<div class="col-8">
+							<span class="text-primary" th:text=${product.sku}></span><br>
+							<a th:href="@{/article-detail?id=}+${product.IDProductDetail}" class="h6 bold d-inline-block" th:text=${product.title}></a>
+							<br> <small><b>Giá: </b> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')+ ' ₫'}"></span></small>
+											
+												</div>
+											</div>
+
+						</div>
+						<hr>
+			       			 </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+<!-- end -->
+		</div>
        	 <div class="form-group">
 			<div class="">
 						     <form th:action="@{/admin/order-update-search/{id}(id=${idCart})}" class="mx-2 my-auto d-inline w-100" method="get">
@@ -47,7 +98,7 @@
 			</div>
 				
 		</div>
-			 <a th:href="@{/admin/order-detail?order={id}(id=${idCart})}" class="text-primary float-right rounded-pill mt-3">Danh sách hóa đơn <i class="fas fa-arrow-circle-right"></i></a> 
+			 <a th:href="@{/admin/order-detail?order={id}(id=${idCart})}" class="text-primary float-right rounded-pill mt-3">Chi tiết hóa đơn <i class="fas fa-arrow-circle-right"></i></a> 
        </div>
    		</div>
    		

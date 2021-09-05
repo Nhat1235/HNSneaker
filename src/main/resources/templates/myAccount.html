@@ -18,8 +18,8 @@
               <div class="col-md-6 col-login">
                 <form th:action="@{/login}" method="post">
                   <div class="form-group text-center mb-2">
-                    <h2 class="mb-0">Log In</h2>
-                    <em>to your account</em>
+                    <h2 class="mb-0">Đăng nhập</h2>
+                    <em>vào tài khoản của bạn</em>
                   </div>
                   <div class="form-group">
                     <div class="input-icon"> 
@@ -43,11 +43,10 @@
                       <label class="custom-control-label"
                         for="loginRemember">Remember me</label>
                     </div>
-                    <a href="#" class="text-primary small reset">Forgot
-                        password ?</a>
+                    <a href="#" class="text-primary small reset">Quên mật khẩu ?</a>
                   </div>
                   <button type="submit"
-                    class="btn btn-primary btn-block">LOGIN</button>
+                    class="btn btn-primary btn-block">Đăng nhập</button>
                 </form>
               </div>
               <!-- /Login Form -->
@@ -58,14 +57,14 @@
               <div class="col-md-6 col-register">
                 <form th:action="@{/new-user}" method="post">
                   <div class="form-group text-center">
-                    <h2 class="bold">Register</h2>
+                    <h2 class="bold">Đăng ký</h2>
                   </div>
                   <div class="form-group">                
                     <div class="input-icon"> 
                       <i data-feather="mail"></i> 
                       <input required="required" type="email" class="form-control" th:classappend="${emailExists} ? is-invalid" 
-                             name="email" placeholder="Email address" th:value="${email}">
-                      <div class="invalid-feedback">Email is already in use</div>                 
+                             name="email" placeholder="Email" th:value="${email}">
+                      <div class="invalid-feedback">Email đã được sử dụng</div>                 
                     </div>
                   </div>
                   <div class="form-group">
@@ -73,7 +72,7 @@
                       <i data-feather="user"></i> 
                       <input required="required" type="text" class="form-control" th:classappend="${usernameExists} ? is-invalid"
                              placeholder="Username" name="username" th:value="${username}" >
-                      <div class="invalid-feedback">Username is already in use</div>                 
+                      <div class="invalid-feedback">Tên người dùng đã được sử dụng</div>                 
                       
                     </div>
                   </div>
@@ -85,7 +84,7 @@
                     </div>
                   </div>
                   <button type="submit"
-                    class="btn btn-outline-primary btn-block">REGISTER</button>
+                    class="btn btn-outline-primary btn-block">Đăng ký</button>
                 </form>
               </div>
               <!-- /Register Form -->
@@ -98,6 +97,6 @@
   
   <div th:replace="common/header :: footer"> </div>
   <div th:replace="common/header :: body-scripts"> </div>
-  
+
 </body>
 </html>

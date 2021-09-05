@@ -64,9 +64,10 @@ $(document).ready(function() {
 				<i class="fas fa-coins"></i> &nbsp Doanh thu theo ngày
 		  </div>
 	      	<div class="row">
-				 <div class="col-sm" th:if="${today}==null"><a>0 ₫</a></div>
-				 <div class="col-sm" th:if="${today}!=null"><a th:text="${#numbers.formatDecimal((today), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+				 <div class="col-sm" th:if="${today}==null"><a>0 ₫</a> / <a th:text="${totalOrderToday}"></a><a> đơn</a></div>
+				 <div class="col-sm" th:if="${today}!=null"><a th:text="${#numbers.formatDecimal((today), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a> / <a th:text="${totalOrderToday}"></a><a> đơn</a></div>
 			</div>
+
       </div>
     </div>
     <div class="col-sm">
@@ -75,8 +76,8 @@ $(document).ready(function() {
 				<i class="fas fa-coins"></i> &nbsp Doanh thu theo tuần
 		  </div>
 	      	<div class="row">
-				 <div class="col-sm" th:if="${week}==null"><a>0 ₫</a></div>
-				 <div class="col-sm" th:if="${week}!=null"><a th:text="${#numbers.formatDecimal((week), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+				 <div class="col-sm" th:if="${week}==null"><a>0 ₫</a> / <a th:text="${totalOrderWeek}"></a><a> đơn</a></div>
+				 <div class="col-sm" th:if="${week}!=null"><a th:text="${#numbers.formatDecimal((week), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a> / <a th:text="${totalOrderWeek}"></a><a> đơn</a></div>
 			</div>
       </div>
     </div>
@@ -86,8 +87,8 @@ $(document).ready(function() {
 				<i class="fas fa-coins"></i> &nbsp Doanh thu tháng&nbsp<a th:text="${#dates.format(#dates.createNow(), ' MM')}"></a>
 		  </div>
 	      	<div class="row">
- 				 <div class="col-sm" th:if="${month}==null"><a>0 ₫</a></div>
-				 <div class="col-sm" th:if="${month}!=null"><a th:text="${#numbers.formatDecimal((month), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a></div>
+ 				 <div class="col-sm" th:if="${month}==null"><a>0 ₫</a> / <a th:text="${totalOrderMonth}"></a><a> đơn</a></div>
+				 <div class="col-sm" th:if="${month}!=null"><a th:text="${#numbers.formatDecimal((month), 0, 'COMMA', 0, 'POINT')}+' ₫'"></a> / <a th:text="${totalOrderMonth}"></a><a> đơn</a></div>
 			</div>
       </div>
     </div>
@@ -102,6 +103,19 @@ $(document).ready(function() {
 			</div>
       </div>
     </div>
+  </div>
+  <div class="row card mt-3">
+  <div class="p-5 text-center bg-dark text-white">
+	      <form th:action="@{/admin/chart/searchByDate}" class="row mb-3 text-center">
+				<i class="fas fa-coins"></i> &nbsp Doanh thu từ ngày &nbsp<input type="date" id="date1" name="date1"> &nbspđến&nbsp <input type="date" id="date2" name="date2">
+		  		&nbsp&nbsp<button type="submit" class="btn btn-primary"><i class="fas fa-search-dollar"></i></button>
+		  </form>
+	      	<div class="row pt-3">
+				 <div class="col-sm" th:if="${byDate}==null"><h2>0 ₫</h2> / <a th:text="${totalByDate}"></a><a> đơn</a></div>
+				 <div class="col-sm" th:if="${byDate}!=null"><h2 th:text="${#numbers.formatDecimal((byDate), 0, 'COMMA', 0, 'POINT')}+' ₫'"></h2> / <a th:text="${totalByDate}"></a><a> đơn</a></div>
+			</div>
+
+      </div>
   </div>
   </div>
   <hr class="mt-5">

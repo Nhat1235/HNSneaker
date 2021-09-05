@@ -104,6 +104,7 @@ public class ShoppingCartController {
 		    
 		    User uTemp = new User();
 		    uTemp.setUsername("user_"+generatedString);
+		    uTemp.setStatus(true);
 		    uTemp.setPassword(generatedString);
 		    userRepos.save(uTemp);
 		    
@@ -118,10 +119,8 @@ public class ShoppingCartController {
 			System.out.println("user đã tạo: "+ uTemp);
 			userSecurityService.authenticateUser(uTemp.getUsername());
 			user = uTemp;
+			attributes.addFlashAttribute("createNewAcc", true);
 		}
-		
-		
-
 		
 		System.out.println("-----Check 3----");
 

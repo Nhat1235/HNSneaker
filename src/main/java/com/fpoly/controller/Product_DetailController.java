@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fpoly.DTO.ProductDetailDTO;
 import com.fpoly.model.Address;
@@ -92,7 +94,37 @@ public class Product_DetailController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(Model model, @ModelAttribute("Product_Detail") Product_Detail product_Detail, HttpServletRequest request) {
+	public String save(Model model, @ModelAttribute("Product_Detail") Product_Detail product_Detail, HttpServletRequest request, BindingResult bindingResults, RedirectAttributes redirectAttributes) {
+		
+		boolean invalidFields = false;
+
+		if (bindingResults.hasErrors()) {
+			return "redirect:/productDetail/getProductDetail";
+		}
+		if (product_Detail.getTitle().equals("")) {
+			redirectAttributes.addFlashAttribute("titleE", true);
+			invalidFields = true;
+		}
+		if (product_Detail.getDescription().equals("")) {
+			redirectAttributes.addFlashAttribute("desE", true);
+			invalidFields = true;
+		}
+		if (product_Detail.getShortTitle().equals("")) {
+			redirectAttributes.addFlashAttribute("shortTE", true);
+			invalidFields = true;
+		}
+		if (product_Detail.getStock()==0) {
+			redirectAttributes.addFlashAttribute("stock", true);
+			invalidFields = true;
+		}
+		if (product_Detail.getSku().equals("")) {
+			redirectAttributes.addFlashAttribute("skuE", true);
+			invalidFields = true;
+		}
+		if (invalidFields) {
+			return "redirect:/productDetail/getProductDetail";
+		}
+		
 		
 		Date listingDate = new Date();
 		

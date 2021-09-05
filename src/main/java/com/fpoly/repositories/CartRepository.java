@@ -31,12 +31,28 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 	@Query(value="select sum(orderTotal) from cart where orderDate = curdate()", nativeQuery = true)
 	BigDecimal today();
 	
+	@Query(value="select count(*) from cart where orderDate = curdate()", nativeQuery = true)
+	BigDecimal totalOrderToday();
+	
 	@Query(value="select sum(orderTotal) from cart where orderDate > now() - interval 1 week", nativeQuery = true)
 	BigDecimal week();
+	
+	@Query(value="select count(*) from cart where orderDate > now() - interval 1 week", nativeQuery = true)
+	BigDecimal totalOrderWeek();
 	
 	@Query(value="select sum(orderTotal) from cart where MONTH(orderDate)=MONTH(now())", nativeQuery = true)
 	BigDecimal month();
 	
+	@Query(value="select count(*) from cart where MONTH(orderDate)=MONTH(now())", nativeQuery = true)
+	BigDecimal totalOrderMonth();
+	
 	@Query(value="SELECT sum(orderTotal) FROM cart WHERE YEAR(orderDate) ='2021'", nativeQuery = true)
 	BigDecimal year();
+	
+	@Query(value="select sum(orderTotal) from cart where orderDate between ?1 and ?2", nativeQuery = true)
+	BigDecimal byDate(String date1, String date2);
+	
+	@Query(value="select count(*) from cart where orderDate between ?1 and ?2", nativeQuery = true)
+	BigDecimal totalByDate(String date1, String date2);
+	
 }

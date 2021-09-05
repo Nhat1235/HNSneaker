@@ -249,7 +249,7 @@ public class AdminControlle {
 	public String createOrder(Model model, @PathVariable("id") Integer id) {
 		List<Product_Detail> product = product_DetailRepository.findAll();
 		model.addAttribute("product", product);
-
+		System.out.println(product);
 		List<String> size = sizeRepo.findAllSizes();
 		model.addAttribute("size", size);
 		

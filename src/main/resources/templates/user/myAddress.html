@@ -29,28 +29,31 @@
           <div class="card">
             <div class="card-body">
               <h3>Địa chỉ giao hàng</h3><hr>
-              <form th:action="@{/update-user-address}" method="post">
+              <form th:action="@{/update-user-address}" method="post" id="AddressForm">
                 <div class="form-row">
                 <div class="form-group col-12">
                     <label for="billingAddress">Họ và tên người nhận</label>
                      <input type="text" class="form-control" th:name="IDAdress" th:value="${user?.address?.IDAdress}" hidden="true">
-                    <input type="text" class="form-control" id="ReciverName" th:name="ReciverName" th:value="${user?.address?.ReciverName}">
+                    <input type="text" class="form-control" id="ReciverName" th:name="ReciverName" th:value="${user?.address?.ReciverName}" th:classappend="${ReciverNameErr} ? is-invalid">
+                  <div class="invalid-feedback">Tên người nhận không được trống</div>
                   </div>
                   
                   <div class="form-group col-12">
                     <label for="billingAddress">Địa chỉ nhà</label>
-                    <input type="text" class="form-control" id="streetAddress" th:name="streetAddress" th:value="${user?.address?.streetAddress}">
+                    <input type="text" class="form-control" id="streetAddress" th:name="streetAddress" th:value="${user?.address?.streetAddress}" th:classappend="${streetAddressErr} ? is-invalid">
+                  	<div class="invalid-feedback">Địa chỉ người nhận không được trống</div>
                   </div>
                   
                     <div class="form-group col-6 col-sm-5">
                     <label for="billingCity">Thành phố</label>
-                    <input type="text" class="form-control" id="city"  th:name="city" th:value="${user?.address?.city}">
+                    <input type="text" class="form-control" id="city"  th:name="city" th:value="${user?.address?.city}" th:classappend="${cityErr} ? is-invalid">
+                  	<div class="invalid-feedback">Thành phố người nhận không được trống</div>
                   </div>
                   
                   <div class="form-group col-6 col-sm-5">
                     <label for="billingCountry">Số điện thoại</label>
-                    <input type="text" class="form-control" id="ReciverPhoneNumber" th:name="ReciverPhoneNumber" th:value="${user?.address?.ReciverPhoneNumber}">
-                    
+                    <input type="text" class="form-control" id="ReciverPhoneNumber" th:name="ReciverPhoneNumber" th:value="${user?.address?.ReciverPhoneNumber}" th:classappend="${ReciverPhoneNumberErr} ? is-invalid">
+                    <div class="invalid-feedback">Số điện thoại người nhận không được trống, chỉ được phép chứa số và có tối đa 11 ký tự</div>
                   </div>
                 
                 </div>

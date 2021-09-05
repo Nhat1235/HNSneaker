@@ -44,17 +44,20 @@
 	    </div>   
 	    
    			 <div class="form-group">
-     			 <input type="text" name="title" class="form-control" placeholder="Tên sản phẩm">
+     			 <input type="text" name="title" class="form-control" placeholder="Tên sản phẩm" th:classappend="${titleE} ? is-invalid">
+     			  <div class="invalid-feedback">Tên sản phẩm không được trống</div>       
     		</div>
     		
     		<div class="form-inline form-group">
     		
     		<div class="form-group" style="margin-right: 20%">
-    			  <input type="text" name="shortTitle" class="form-control" placeholder="Tên viết tắt">
+    			  <input type="text" name="shortTitle" class="form-control" placeholder="Tên viết tắt" th:classappend="${shortTE} ? is-invalid">
+    			   <div class="invalid-feedback">Tên viết tắt không được trống</div> 
     		</div>
     		
     		<div class="form-group">
-     			 <input type="text" name="sku" class="form-control" placeholder="SKU">
+     			 <input type="text" name="sku" class="form-control" placeholder="SKU" th:classappend="${skuE} ? is-invalid">
+     			 <div class="invalid-feedback">SKU không được trống</div> 
     		</div>
     		
   			</div>
@@ -62,17 +65,20 @@
    			<div class="form-inline form-group">
     		
     		<div class="form-group" style="margin-right: 20%">
-    			  <input type="number" name="stock" class="form-control" placeholder="Số lượng">
+    			  <input type="number" name="stock" class="form-control" placeholder="Số lượng" required="required">
+    			  
     		</div>
     		
     		<div class="form-group">
-     			 <input type="number" name="price" id="price" class="form-control" placeholder="Giá bán">&nbsp <h4>₫</h4>
+     			 <input type="number" name="price" id="price" class="form-control" placeholder="Giá bán" required="required">&nbsp <h4>₫</h4>
+     		
     		</div>
     		
   			</div>
   			
     		<div class="form-group">
-    			  <textarea name="description" class="form-control" placeholder="Mô tả sản phẩm" rows="5"></textarea>
+    			  <textarea name="description" class="form-control" placeholder="Mô tả sản phẩm" rows="5"  th:classappend="${desE} ? is-invalid"></textarea>
+    			  <div class="invalid-feedback">Mô tả không được trống</div> 
     		</div>
   			
    			<div class="form-group">
